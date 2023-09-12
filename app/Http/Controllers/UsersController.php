@@ -8,7 +8,7 @@ use App\Models\Doctor;
 use App\Models\UserDetails;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
- 
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -18,6 +18,26 @@ class UsersController extends Controller
     public function index()
     {
         //
+        $user = array(); //this will display a set of users and doctors data
+        $user = Auth::user();
+        $doctor = User::where('type', 'doctor')->get();
+        $doctorData = Doctor::all();
+
+        //collect user data and all doctor details
+
+        foreach($doctorData as $data){
+            //sorting doctor name and doctor_details
+            foreach($doctor as $info){
+                if($data['doc_id'] == $info['id']){
+                    $data['doctor_name'] = $info['name'];
+                    $data['doctor_profile'] = $info['profile_photo_url'];
+                }
+            }
+        }
+
+        $user['doctor'] = $doctorData;
+
+        return $user; //return all data
     }
 
     /**

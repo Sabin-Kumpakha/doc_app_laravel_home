@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PostsController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,6 +21,16 @@ use App\Http\Controllers\PostsController;
 // Route::post('/login', [UsersController::class, 'login']);
 Route::any('/login', [UsersController::class, 'login']);
 Route::any('/register', [UsersController::class, 'register']);
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+//this group returns data only if the user is authenticated successfully using sanctum
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [UsersController::class, 'index']);
+
 });
+
+    // Route::get('/posts', [PostsController::class, 'index']);
+    // Route::post('/posts', [PostsController::class, 'store']);
+    // Route::get('/posts/{id}', [PostsController::class, 'show']);
+    // Route::put('/posts/{id}', [PostsController::class, 'update']);
+    // Route::delete('/posts/{id}', [PostsController::class, 'destroy']);
+    // Route::post('/logout', [UsersController::class, 'logout']);
